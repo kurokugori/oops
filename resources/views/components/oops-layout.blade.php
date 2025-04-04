@@ -55,9 +55,34 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{url('trangchu/phone_brands/4')}}">Samsung</a>
                                 </li>
+                    </div>
+                    <div class="ml-auto">
+                            <ul class="navbar-nav">
+                                @guest
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('login_register.show') }}">
+                                        <i class="fas fa-sign-in-alt"></i> Đăng nhập / Đăng ký
+                                    </a>
+                                </li>
+                                @else
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-user"></i> Chào, {{ Auth::user()->first_name }}
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                        <a class="dropdown-item" href="{{ route('dashboard') }}">Tài khoản của tôi</a>
+                                        <div class="dropdown-divider"></div>
+                                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                                            @csrf
+                                            <button type="submit" class="dropdown-item" style="border: none; background: none; cursor: pointer; width: 100%; text-align: left; padding: .25rem 1.5rem;">
+                                                <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                                            </button>
+                                        </form>
+                                    </div>
+                                </li>
+                                @endguest
                             </ul>
                     </div>
-            </div>
             </nav>
         </header>
         <main style="width:1000px; margin:2px auto;">
