@@ -31,6 +31,32 @@
                 margin:10px;
                 text-align:center;
             }
+            /* Dropdown menu item styling */
+            .dropdown-menu .dropdown-item {
+                color: black !important; /* Default color for dropdown items */
+            }
+            .dropdown-menu .dropdown-item:hover,
+            .dropdown-menu .dropdown-item:focus {
+                color: #333 !important; /* Màu chữ khi hover/focus */
+                background-color: #f8f9fa;
+            }
+
+            /* Style the logout button to look like a regular dropdown item */
+            .dropdown-item.btn-logout {
+                border: none;
+                background: none;
+                cursor: pointer;
+                width: 100%;
+                text-align: left;
+                padding: .25rem 1.5rem; /* Match Bootstrap's dropdown item padding */
+                color: black !important; /* <--- Đảm bảo nút logout cũng màu đen */
+                display: block;
+            }
+            .dropdown-item.btn-logout:hover,
+            .dropdown-item.btn-logout:focus {
+                color: #333 !important; /* Màu chữ nút logout khi hover/focus */
+                background-color: #f8f9fa;
+            }
         </style>
     </head>
     <body>
@@ -70,7 +96,7 @@
                                         <i class="fas fa-user"></i> Chào, {{ Auth::user()->first_name }}
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                                        <a class="dropdown-item" href="{{ route('dashboard') }}">Tài khoản của tôi</a>
+                                        <a class="dropdown-item" href="{{ route('account.edit') }}">Tài khoản của tôi</a>
                                         <div class="dropdown-divider"></div>
                                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
                                             @csrf

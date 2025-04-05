@@ -157,4 +157,7 @@ class AuthController extends Controller
         return redirect('/trangchu'); // <-- Chuyển về trang chủ thay vì trang login
         
     }
+
+
+    
 }
