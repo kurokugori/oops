@@ -14,6 +14,30 @@
             padding: 0;
             background-color: #f8f9fa; /* Màu nền nhẹ cho body */
         }
+        /* CSS cho thanh tìm kiếm */
+        .top-search-bar input.form-control {
+            border-radius: 20px;
+        }
+        .top-search-bar button.btn {
+            border-radius: 20px;
+        }
+        .logo-container {
+            width: 180px; /* Chiều rộng cố định cho container logo */
+            height: 60px; /* Chiều cao cố định cho container logo */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        .logo {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* giữ nguyên tỉ lệ ảnh */
+        }
+        .search-container {
+            flex: 1; /* Cho phép search form mở rộng để lấp đầy không gian còn lại */
+            max-width: 800px;
+        }
         /* Bọc toàn bộ trang để giới hạn chiều rộng và căn giữa */
         .page-wrapper {
              max-width: 1000px; /* Chiều rộng tối đa */
@@ -27,12 +51,23 @@
         header {
             /* Phần header không cần style riêng nhiều nếu chỉ chứa banner và nav */
         }
-        .page-banner {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+        /* CSS cho banner */
+        .carousel-item img {
             max-width: 100%;
             height: auto;
+            max-height: 500px; /* Điều chỉnh chiều cao tối đa phù hợp với thiết kế */
+            object-fit: cover; /* Đảm bảo ảnh che đủ không gian nhưng không bị méo */
+        }
+
+        /* Tùy chọn: Làm cho indicators (chấm tròn) dễ nhìn hơn */
+        .carousel-indicators li {
+            background-color: rgba(255, 255, 255, 0.5);
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+        }
+        .carousel-indicators .active {
+            background-color: white;
         }
         .navbar.custom-navbar {
             background-color: #ff5850; /* Màu đỏ cam đặc trưng */
@@ -100,20 +135,74 @@
              grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
              gap: 15px;
          }
-         .product-item {
+        .product-item {
              border: 1px solid #eee; padding: 10px; text-align: center;
              background-color: #fff; transition: box-shadow 0.2s ease-in-out;
          }
-         .product-item:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-         .product-item img { max-width: 100%; height: 150px; object-fit: contain; margin-bottom: 10px; }
-         .product-item h6 { font-size: 0.95em; margin-bottom: 5px; height: 40px; overflow: hidden; }
-         .product-item .price { font-weight: bold; color: #dc3545; margin-bottom: 10px; }
-         .product-item .btn { font-size: 0.85em; }
+        .product-item:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .product-item img { max-width: 100%; height: 150px; object-fit: contain; margin-bottom: 10px; }
+        .product-item h6 { font-size: 0.95em; margin-bottom: 5px; height: 40px; overflow: hidden; }
+        .product-item .price { font-weight: bold; color: #dc3545; margin-bottom: 10px; }
+        .product-item .btn { font-size: 0.85em; }
     </style>
 </head>
+<script>
+    $(document).ready(function(){
+        // Thay đổi thời gian chuyển đổi thành 5 giây (5000ms)
+        $('#bannerCarousel').carousel({
+            interval: 5000
+        });
+    });
+</script>
 <body>
+    <div class="top-search-bar bg-light py-2 border-bottom">
+    <div class="container d-flex align-items-center">
+                <div class="logo-container">
+                    <a href="{{ route('home') }}"><img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo"></a>
+                </div>
+                <div class="search-container">
+                    <form action="{{ route('search') }}" method="GET" class="d-flex">
+                        <input type="text" name="query" class="form-control mr-2 flex-grow-1" placeholder="Tìm kiếm sản phẩm...">
+                        <button type="submit" class="btn btn-outline-danger">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+    </div>
     <header>
-    <img src="{{ asset('images/banner.jpg') }}" alt="Website Banner" class="page-banner img-fluid">
+        {{-- Navigation Banner --}}
+            <div id="bannerCarousel" class="carousel slide" data-ride="carousel">
+                <!-- Indicators (chấm tròn điều hướng) -->
+                <ol class="carousel-indicators">
+                    <li data-target="#bannerCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#bannerCarousel" data-slide-to="1"></li>
+                    <li data-target="#bannerCarousel" data-slide-to="2"></li>
+                </ol>
+            
+                <!-- Slides (các ảnh banner) -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{{ asset('images/banner1.jpg') }}" class="d-block w-100" alt="Banner 1">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ asset('images/banner2.jpg') }}" class="d-block w-100" alt="Banner 2">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{{ asset('images/banner3.jpg') }}" class="d-block w-100" alt="Banner 3">
+                    </div>
+                </div>
+            
+                <!-- Điều khiển trước/sau -->
+                <a class="carousel-control-prev" href="#bannerCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#bannerCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
         {{-- Navigation Menu --}}
         <nav class="navbar navbar-light navbar-expand-sm custom-navbar">
             <div class='container d-flex justify-content-between'>

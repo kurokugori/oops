@@ -25,6 +25,8 @@ Route::get('/trangchu/phone_brands/{id}', [OopsController::class, 'phone_brands'
 Route::get('/trangchu/chi_tiet/{id}', [OopsController::class, 'chitiet']) // *** Cập nhật cú pháp ***
       ->name('product.detail'); // *** Nên đặt tên cụ thể hơn ***
 
+// Route xử lý cho tìm kiếm sản phẩm
+Route::get('/search', [OopsController::class, 'search'])->name('search');
 
 // Route gốc '/' - Điều hướng dựa trên trạng thái đăng nhập
 Route::get('/', function () {
