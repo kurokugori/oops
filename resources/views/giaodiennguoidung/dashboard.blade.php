@@ -1,103 +1,13 @@
-<!DOCTYPE html>
-<html lang="vi"> {{-- Đặt ngôn ngữ phù hợp --}}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {{-- Lấy title từ controller hoặc đặt mặc định --}}
-    <title>{{ $title ?? 'Thông tin tài khoản' }}</title>
+<x-oops-layout>
+    <x-slot name='title'>  
+        Thông tin tài khoản 
+    </x-slot> 
 
-    {{-- === CSS === --}}
-    {{-- Bootstrap CSS --}}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
     {{-- Font Awesome CSS (Cho các icon) --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
-        /* === CSS Layout Cơ Bản (Giống layout gốc) === */
-        body {
-             /* background-color: #f8f9fa; */ /* Optional: Màu nền nhẹ nhàng */
-        }
-
-        .page-banner {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            max-width: 1000px; /* Hoặc kích thước banner của bạn */
-            height: auto;
-            /* margin-bottom: 15px; */ /* Khoảng cách dưới banner nếu cần */
-        }
-
-        .navbar.custom-navbar { /* Navbar chính màu đỏ */
-            background-color: #ff5850;
-            max-width: 1000px;
-            font-weight: bold;
-            margin: 0 auto; /* Căn giữa navbar */
-            border-radius: 0 0 5px 5px; /* Bo góc dưới nếu muốn */
-        }
-
-        .navbar.custom-navbar .nav-item .nav-link {
-            color: #fff !important; /* Màu chữ menu */
-        }
-         .navbar.custom-navbar .nav-item .nav-link:hover,
-         .navbar.custom-navbar .nav-item.active .nav-link {
-            color: #eee !important; /* Màu chữ khi hover hoặc active */
-            /* background-color: rgba(0,0,0,0.1); */ /* Nền nhẹ khi active/hover */
-         }
-
-        .main-container { /* Vùng nội dung chính */
-            width: 100%; /* Chiếm toàn bộ chiều rộng bên trong */
-            max-width: 1000px; /* Giới hạn chiều rộng tối đa */
-            margin: 20px auto; /* Căn giữa và tạo khoảng cách trên/dưới */
-            min-height: 450px; /* Chiều cao tối thiểu */
-            background-color: #ffffff; /* Nền trắng cho nội dung */
-            padding: 20px; /* Padding bên trong vùng nội dung */
-            border-radius: 5px; /* Bo góc nhẹ */
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Đổ bóng nhẹ */
-        }
-
-        /* Dropdown menu styling */
-        .dropdown-menu .dropdown-item {
-            color: black !important;
-        }
-        .dropdown-menu .dropdown-item:hover,
-        .dropdown-menu .dropdown-item:focus,
-        .dropdown-menu .dropdown-item.active { /* Thêm active state */
-            color: #333 !important;
-            background-color: #f8f9fa;
-        }
-        .dropdown-item.btn-logout { /* Style nút logout */
-            border: none; background: none; cursor: pointer; width: 100%;
-            text-align: left; padding: .25rem 1.5rem; color: black !important; display: block;
-        }
-        .dropdown-item.btn-logout:hover, .dropdown-item.btn-logout:focus {
-             color: #333 !important; background-color: #f8f9fa;
-        }
-
-        .page-footer { /* Footer */
-            text-align: center;
-            padding: 20px 0;
-            background-color: #e9ecef; /* Màu nền footer */
-            margin-top: 30px;
-            /* border-top: 1px solid #dee2e6; */
-            max-width: 1000px; /* Giới hạn chiều rộng giống navbar */
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 5px 5px 0 0; /* Bo góc trên nếu muốn */
-        }
-        .page-footer h5 {
-             color: #495057;
-             margin-bottom: 10px;
-        }
-        .page-footer p, .page-footer a {
-             color: #6c757d;
-             font-size: 0.9em;
-        }
-         .page-footer a:hover {
-            color: #343a40;
-            text-decoration: none;
-         }
-
         /* === CSS Cụ Thể Cho Form Tài Khoản === */
         .form-control:disabled, .form-control[readonly] {
              background-color: #e9ecef; /* Màu nền input bị khóa */
@@ -126,78 +36,10 @@
              border-color: #ffc107;
              color: #212529; /* Màu chữ cho nút vàng */
          }
-
     </style>
-</head>
-<body>
-    {{-- === HEADER (Banner + Menu) === --}}
-    <header style='text-align:center;'>
-        {{-- Banner --}}
-        <img src="{{ asset('images/banner.jpg') }}" alt="Website Banner" class="page-banner img-fluid"> {{-- Thêm img-fluid cho responsive --}}
-
-        {{-- Navigation Menu --}}
-        <nav class="navbar navbar-light navbar-expand-sm custom-navbar">
-            <div class='container-fluid p-0 d-flex justify-content-between'>
-                {{-- Left Navigation (Brands) --}}
-                <ul class="navbar-nav">
-                    <li class="nav-item {{ Request::is('/') || Request::is('trangchu') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('home') }}">Trang chủ</a> {{-- Nên dùng route name --}}
-                    </li>
-                    <li class="nav-item {{ Request::is('trangchu/phone_brands/1*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ url('trangchu/phone_brands/1') }}">Apple</a>
-                    </li>
-                    <li class="nav-item {{ Request::is('trangchu/phone_brands/2*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ url('trangchu/phone_brands/2') }}">Oppo</a>
-                    </li>
-                    <li class="nav-item {{ Request::is('trangchu/phone_brands/3*') ? 'active' : '' }}">
-                            <a class="nav-link" href="{{ url('trangchu/phone_brands/3') }}">Redmi</a>
-                    </li>
-                    <li class="nav-item {{ Request::is('trangchu/phone_brands/4*') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ url('trangchu/phone_brands/4') }}">Samsung</a>
-                    </li>
-                    {{-- Thêm các link khác nếu cần --}}
-                </ul>
-
-                {{-- Right Navigation (User Auth) --}}
-                <ul class="navbar-nav">
-                    @guest
-                    <li class="nav-item">
-                        {{-- Link đến trang đăng nhập / đăng ký --}}
-                        <a class="nav-link" href="{{ route('login_register.show') }}"> {{-- Thay 'login_register.show' bằng tên route thực tế --}}
-                            <i class="fas fa-sign-in-alt"></i> Đăng nhập / Đăng ký
-                        </a>
-                    </li>
-                    @else
-                    {{-- User Dropdown --}}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-user"></i> Chào, {{ Auth::user()->first_name }}
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                            {{-- Link đến trang tài khoản (trang này) --}}
-                            <a class="dropdown-item {{ Request::routeIs('account.edit') ? 'active' : '' }}" href="{{ route('account.edit') }}"> {{-- Đặt tên route là 'account.edit' --}}
-                                Tài khoản của tôi
-                            </a>
-                            {{-- Thêm các link khác nếu cần (VD: Đơn hàng của tôi) --}}
-                            {{-- <a class="dropdown-item" href="#">Đơn hàng của tôi</a> --}}
-                            <div class="dropdown-divider"></div>
-                            {{-- Logout Form --}}
-                            <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-                                @csrf
-                                <button type="submit" class="dropdown-item btn-logout">
-                                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
-                                </button>
-                            </form>
-                        </div>
-                    </li>
-                    @endguest
-                </ul>
-            </div>
-        </nav>
-    </header>
 
     {{-- === MAIN CONTENT AREA === --}}
-    <main class="main-container">
+    <div>
         {{-- Nội dung form tài khoản bạn đã cung cấp --}}
         <div class="container my-4"> {{-- Không cần container nữa vì main-container đã có padding --}}
             <h1 class="mb-4 text-center">Thông Tin Tài Khoản</h1> {{-- Căn giữa tiêu đề --}}
@@ -309,44 +151,9 @@
                 </div>
 
             </form>
-
-            
-            </div>
-
-        </div> {{-- Đóng .container bên trong main --}}
-    </main>
-
-    {{-- === FOOTER === --}}
-    <footer class="page-footer">
-        <div class="container">
-            <div class='row'>
-                <div class='col-md-4 mb-3 mb-md-0'>
-                    <h5>TRỤ SỞ</h5>
-                    <p>123 Đường ABC, Quận 1<br>TP. Hồ Chí Minh, Việt Nam</p>
-                </div>
-                <div class='col-md-4 mb-3 mb-md-0'>
-                    <h5>THÔNG TIN CHUNG</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#">Về chúng tôi</a></li>
-                        <li><a href="#">Liên hệ</a></li>
-                        <li><a href="#">Điều khoản dịch vụ</a></li>
-                        <li><a href="#">Chính sách bảo mật</a></li>
-                    </ul>
-                </div>
-                <div class='col-md-4'>
-                    <h5>BẢN ĐỒ</h5>
-                    {{-- Thay bằng iframe Google Maps hoặc ảnh bản đồ --}}
-                    <p>[Nhúng bản đồ vào đây]</p>
-                    {{-- <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="150" style="border:0;" allowfullscreen="" loading="lazy"></iframe> --}}
-                </div>
-            </div>
-            <div class="row mt-3 pt-3 border-top">
-                 <div class="col text-muted text-center">
-                     © {{ date('Y') }} Tên Cửa Hàng Của Bạn. Bảo lưu mọi quyền.
-                 </div>
-            </div>
         </div>
-    </footer>
+    </div> {{-- Đóng .container bên trong main --}} 
+
 
     {{-- === JAVASCRIPT === --}}
     {{-- jQuery first, then Popper.js, then Bootstrap JS --}}
@@ -369,5 +176,4 @@
         });
      </script>
 
-</body>
-</html>
+</x-oops-layout>
