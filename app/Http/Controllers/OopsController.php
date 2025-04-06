@@ -4,19 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 
 class OopsController extends Controller
 {
     function trangchu()
     {
-        $data = DB::select("select * from products order by unit_price asc limit 0,8");
-        return view("index", compact("data"));
+        $data = DB::table('products')->orderBy('unit_price', 'asc')->paginate(8);
+        return view('index', compact('data'));
     }
 
     function phone_brands($id)
     {
-        $data = DB::select("select * from products where phone_brand_id = ?",[$id]);
-        return view("index", compact("data"));
+        $data = DB::table('products')->where('phone_brand_id', $id)->paginate(8);
+        return view('index', compact('data'));
     }
 
     function chitiet($id)
@@ -30,14 +31,14 @@ class OopsController extends Controller
     {
         $query = $request->input('query');
 
-        // Tìm kiếm sản phẩm theo tên, hãng
-        $data = DB::select(
-            "SELECT p.id as product_id, p.*, b.brand_name 
-             FROM products p
-             JOIN phone_brands b ON p.phone_brand_id = b.id
-             WHERE p.product_name LIKE ? OR b.brand_name LIKE ?",
-            ['%' . $query . '%', '%' . $query . '%']
-        );
+        $data = DB::table('products as p')
+            ->join('phone_brands as b', 'p.phone_brand_id', '=', 'b.id')
+            ->where('p.product_name', 'LIKE', '%' . $query . '%')
+            ->orWhere('b.brand_name', 'LIKE', '%' . $query . '%')
+            ->select('p.id as product_id', 'p.*', 'b.brand_name')
+            ->paginate(8)
+            ->appends(['query' => $query]); // giữ lại từ khóa khi chuyển trang
+
         return view('giaodiennguoidung.results', compact('data', 'query'));
     }
 }
