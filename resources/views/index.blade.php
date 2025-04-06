@@ -5,15 +5,17 @@
     <div class='list-oops'>
             @foreach($data as $row)
                 <div class='oops'>
-                    <a href="{{url('trangchu/chi_tiet/'.$row->id)}}">
+                    <a href="{{url('trangchu/chi_tiet/'.$row->id)}}" style="text-decoration: none; color: inherit;">
                         <div class="product-frame">
                             <div class="product-text">
                                     <h5>OOPS</h5>
                             </div>
                             <img src="{{asset('anh/'.$row->image_url)}}" class="product-image">
                         </div><br>
-                        <b>{{$row->product_name}}</b><br/>
-                        <i>{{number_format($row->unit_price,0,",",".")}}đ</i>
+                        <b class="product-name">
+                            {{ \Illuminate\Support\Str::limit($row->product_name, 80) }}
+                        </b>
+                        <i>Giá bán: {{number_format($row->unit_price,0,",",".")}}đ</i>
                     </a>
                 </div>
             @endforeach
