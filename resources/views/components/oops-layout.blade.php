@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -15,6 +16,11 @@
             background-color: #f8f9fa; /* Màu nền nhẹ cho body */
         }
         /* CSS cho thanh tìm kiếm */
+        .top-search-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+        }
         .top-search-bar input.form-control {
             border-radius: 20px;
         }
@@ -116,6 +122,39 @@
             flex-grow: 1; /* Cho phép main content chiếm không gian còn lại */
             padding: 20px 15px;
         }
+        /*CSS cho ảnh sản phẩm*/
+        .product-frame {
+            border: 6px solid  #ffffff;        /* Viền trắng như mẫu */
+            background-color:rgb(228, 194, 194);        /* Màu khung  */
+            padding: 10px;                    /* Tạo khoảng cách giữa ảnh và khung */
+            border-radius: 20px;              /* Bo tròn khung */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Đổ bóng nhẹ */
+            display: inline-block;
+        }
+
+        .product-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 20px;              /* Bo tròn viền ảnh bên trong */
+            display: block;
+        }
+
+        .product-text {
+            position: static; /* không cần position: absolute nữa */
+            text-align: center;
+            color: #ff5850;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .product-text h5 {
+            font-size: 1.5em;
+            font-weight: bold;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgb(0, 106, 255),rgb(198, 43, 255));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
 
         /* Footer */
         footer.page-footer {
@@ -209,7 +248,7 @@
                 {{-- Left Navigation (Brands) --}}
                 <ul class="navbar-nav ">
                     <li class="nav-item {{ Request::is('/') || Request::is('trangchu') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('home') }}">Trang chủ</a> {{-- Nên dùng route name --}}
+                        <a class="nav-link" href="{{ url('trangchu') }}" >Trang chủ</a> {{-- Nên dùng route name --}}
                     </li>
                     <li class="nav-item {{ Request::is('trangchu/phone_brands/1*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ url('trangchu/phone_brands/1') }}">Apple</a>
@@ -293,7 +332,7 @@
             </div>
             <div class="row mt-3 pt-3 border-top">
                  <div class="col text-muted text-center">
-                     © {{ date('Y') }} Tên Cửa Hàng Của Bạn. Bảo lưu mọi quyền.
+                     © {{ date('Y') }} OOPS - PROTECT YOUR PHONE
                  </div>
             </div>
         </div>
