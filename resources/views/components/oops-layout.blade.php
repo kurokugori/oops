@@ -156,6 +156,21 @@
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
+        .product-name {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 3em;
+            font-weight: bold;
+            font-size: 15px;
+            text-align: center;
+            margin-top: 8px;
+            margin-left:20px;
+            margin-right:20px;
+        }
+
         /* Footer */
         footer.page-footer {
             text-align: center;
