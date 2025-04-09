@@ -78,5 +78,16 @@ Route::middleware(['auth'])->prefix('tai-khoan')->group(function () { // *** Th�
 });
 // --- Kết thúc Routes cho khu vực tài khoản ---
 
+//-- Phần orders
+
+Route::get('/order', [OopsController::class, 'order'])  // route cho trang đặt hàng
+     ->name('order');
+Route::post('/cart/add',[OopsController::class, 'cartadd'])
+->name('cartadd');
+Route::post('/cart/delete',[OopsController::class, 'cartdelete']) // đường dẫn cho các trang xóa sản phẩm trong đơn hàng và xử lý đặt hàng
+->name('cartdelete');
+Route::post('/order/create',[OopsController::class, 'ordercreate'])
+->middleware('auth')->name('ordercreate');
+
 
 // Route::get('/dashboard', function () { /* ... */ })->name('dashboard'); // Xóa hoặc sửa route dashboard cũ nếu không dùng đến
