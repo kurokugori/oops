@@ -94,6 +94,7 @@
        
     </div>
 <script>
+    /*
     $.ajax({
     url: "/cart/delete",
     method: "POST", // <-- Sửa thành POST
@@ -104,7 +105,7 @@
     success: function(response) {
         // Xử lý thành công
     }
-});
+});*/
 </script>
 </x-oops-layout>
 

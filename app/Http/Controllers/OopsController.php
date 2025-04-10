@@ -93,7 +93,7 @@ class OopsController extends Controller
     public function cartdelete(Request $request)
     {
         $request->validate([
-        "id"=>["required","numeric"]
+        "id"=>["required"]
         ]);
         $id = $request->id;
         $total = 0;
