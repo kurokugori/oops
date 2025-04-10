@@ -5,11 +5,35 @@
 
     <div>
         <div style='color:#15c; font-weight:bold;font-size:15px;text-align:center'>DANH SÁCH SẢN PHẨM</div>
-        
-            <table class='book-table' style='margin:0 auto; width:70%'>
+            <style>
+                .product-table {
+                    border-collapse: collapse;
+                    width: 70%;
+                    margin: 0 auto;
+                }
+
+                .product-table th, .product-table td {
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                }
+
+                .product-table th {
+                    background-color: #f2f2f2;
+                    text-align: center;
+                }
+
+                .product-table tr:hover {
+                    background-color: #f9f9f9;
+                }
+
+                .product-table td {
+                    text-align: center;
+                }
+            </style>
+            <table class='product-table' style='margin:0 auto; width:70%'>
                 <thead>
                     <th>STT</th>
-                    <th>Tên sản phẩm</th>
+                    <th>Sản phẩm</th>
                     <th>Số lượng</th>
                     <th>Đơn giá</th>
                     <th>Xóa</th>
@@ -26,14 +50,14 @@
                             <td align='center'>{{number_format($row->unit_price,0,',','.')}}đ</td>
                             <td align='center'>
                                 <form method='post' action = "{{route('cartdelete')}}" >
-                                    <input type='hidden' value='{{$row->id}}' name='id'>
+                                    <input type='hidden' value='{{(string)$row->id}}' name='id'>
                                     <input type='submit' class='btn btn-sm btn-danger' value='Xóa'>
                                     {{ csrf_field() }}
                                 </form>
                             </td>
                        </tr>
                        @php
-                            $tongTien +=$quantity[$row->id]*$row->gia_ban;
+                            $tongTien +=$quantity[$row->id]*$row->unit_price;
                         @endphp
                     @endforeach
                     <tr>
@@ -69,6 +93,19 @@
             
        
     </div>
-
+<script>
+    /*
+    $.ajax({
+    url: "/cart/delete",
+    method: "POST", // <-- Sửa thành POST
+    data: {
+        id: productId,
+        _token: "{{ csrf_token() }}" // Thêm CSRF token
+    },
+    success: function(response) {
+        // Xử lý thành công
+    }
+});*/
+</script>
 </x-oops-layout>
 
