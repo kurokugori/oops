@@ -41,4 +41,51 @@ class OopsController extends Controller
 
         return view('giaodiennguoidung.results', compact('data', 'query'));
     }
+
+    public function cartadd(Request $request) // thêm sản phẩm vô giỏ hàng
+    {
+        $request->validate([
+            "id"=>["required","numeric"],
+            "num"=>["required","numeric"]
+        ]);
+        $id = $request->id;
+        $num = $request->num;
+        $total = 0;
+        $cart = [];
+        if(session()->has('cart'))
+        {
+            $cart = session()->get("cart");
+            if(isset($cart[$id]))
+            $cart[$id] += $num;
+            else
+            $cart[$id] = $num ;
+        }
+        else
+        {
+            $cart[$id] = $num ;
+        }
+        session()->put("cart",$cart);
+        return count($cart);
+    }
+
+
+    public function order() // đặt hàng
+    {
+    $cart=[];
+    $data =[];
+    $quantity = [];
+    if(session()->has('cart'))
+    {
+        $cart = session("cart");
+        $list_case = "";
+        foreach($cart as $id=>$value)
+        {
+            $quantity[$id] = $value;
+            $list_case .=$id.", ";
+        }
+        $list_case = substr($list_case, 0,strlen($list_case)-2);
+        $data = DB::table("products")->whereRaw("id in (".$list_case.")")->get();
+    }
+    return view("giaodiennguoidung.order",compact("quantity","data"));
+    } 
 }
