@@ -6,10 +6,10 @@
     <div>
         <div style='color:#15c; font-weight:bold;font-size:15px;text-align:center'>DANH SÁCH SẢN PHẨM</div>
         
-            <table class='book-table' style='margin:0 auto; width:70%'>
+            <table class='product-table' style='margin:0 auto; width:70%'>
                 <thead>
                     <th>STT</th>
-                    <th>Tên sản phẩm</th>
+                    <th>Sản phẩm</th>
                     <th>Số lượng</th>
                     <th>Đơn giá</th>
                     <th>Xóa</th>
@@ -33,7 +33,7 @@
                             </td>
                        </tr>
                        @php
-                            $tongTien +=$quantity[$row->id]*$row->gia_ban;
+                            $tongTien +=$quantity[$row->id]*$row->unit_price;
                         @endphp
                     @endforeach
                     <tr>

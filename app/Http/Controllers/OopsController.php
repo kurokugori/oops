@@ -42,50 +42,51 @@ class OopsController extends Controller
         return view('giaodiennguoidung.results', compact('data', 'query'));
     }
 
-    public function cartadd(Request $request) // thêm sản phẩm vô giỏ hàng
+    public function cartadd(Request $request)
     {
-        $request->validate([
-            "id"=>["required","numeric"],
-            "num"=>["required","numeric"]
-        ]);
         $id = $request->id;
         $num = $request->num;
-        $total = 0;
-        $cart = [];
-        if(session()->has('cart'))
-        {
-            $cart = session()->get("cart");
-            if(isset($cart[$id]))
+
+        $cart = session()->get("cart", []);
+
+        if (isset($cart[$id])) {
             $cart[$id] += $num;
-            else
-            $cart[$id] = $num ;
+        } else {
+            $cart[$id] = $num;
         }
-        else
-        {
-            $cart[$id] = $num ;
-        }
-        session()->put("cart",$cart);
-        return count($cart);
+
+        session()->put("cart", $cart);
+
+        return response()->json(['count' => count($cart)]);
     }
 
+    public function order()
+    {
+        $cart = [];
+        $data = [];
+        $quantity = [];
+        
+        // Kiểm tra xem giỏ hàng có tồn tại trong session không
+        if (session()->has('cart')) {
+            $cart = session("cart");
+            $list_product = [];
+            
+            // Lặp qua các sản phẩm trong giỏ hàng để tạo ra danh sách các ID sản phẩm
+            foreach ($cart as $id => $value) {
+                $quantity[$id] = $value;  // Lưu số lượng cho mỗi sản phẩm
+                $list_product[] = "'$id'"; // Dùng dấu nháy đơn để bao quanh ID vì ID là chuỗi
+            }
+            
+            // Chuyển mảng list_product thành chuỗi, cách nhau bởi dấu phẩy
+            $list_product_str = implode(",", $list_product);
 
-    public function order() // đặt hàng
-    {
-    $cart=[];
-    $data =[];
-    $quantity = [];
-    if(session()->has('cart'))
-    {
-        $cart = session("cart");
-        $list_case = "";
-        foreach($cart as $id=>$value)
-        {
-            $quantity[$id] = $value;
-            $list_case .=$id.", ";
+            // Truy vấn danh sách sản phẩm từ database dựa trên các ID sản phẩm trong giỏ
+            $data = DB::table("products")
+                    ->whereRaw("id in ($list_product_str)") // Dùng whereRaw để xử lý chuỗi ID
+                    ->get();
         }
-        $list_case = substr($list_case, 0,strlen($list_case)-2);
-        $data = DB::table("products")->whereRaw("id in (".$list_case.")")->get();
-    }
-    return view("giaodiennguoidung.order",compact("quantity","data"));
+
+        // Trả về view với dữ liệu giỏ hàng và sản phẩm
+        return view("giaodiennguoidung.order", compact("quantity", "data"));
     } 
 }

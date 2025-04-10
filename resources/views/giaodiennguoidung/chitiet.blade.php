@@ -10,46 +10,46 @@
                     <img src="{{asset('anh/'.$data->image_url)}}" class="img-fluid">
                 </div>
                 <div class="col-md-8">
-                    <h3>{{$data->product_name}}</h3>
-                    <p><strong>Giá bán:</strong> {{$data->unit_price}}</p>     
-                    <div class='mt-1'>  <!--Nút và số lượng đặt hàng-->
-                        Số lượng mua:
-                        <input type='number' id='product-number' size='5' min="1" value="1">
-                        <button class='btn btn-success btn-sm mb-1' id='add-to-cart'>Thêm vào giỏ hàng</button>
-                    </div>            
-                </div>
+                    <h3>{{ $data->product_name }}</h3>
+                    <p><strong>Giá bán:</strong> {{ $data->unit_price }}</p>
 
-                <div class="col-md-12" style="text-align: justify;">
-                    <h5>Mô tả sản phẩm</h5>
-                    <p>{{$data->description}}</p>
+                    <div class="mt-2" style="text-align: justify;">
+                        <h5>Mô tả sản phẩm</h5>
+                        <p>{{ $data->description }}</p>
+                    </div>
+
+                    <div class="mt-3">
+                        <label for="product-number">Số lượng mua:</label>
+                        <input type="number" id="product-number" size="5" min="1" value="1" class="form-control d-inline-block w-auto mx-2">
+                        <button class="btn btn-success btn-sm mb-1" id="add-to-cart">Thêm vào giỏ hàng</button>
+                    </div>
                 </div>
             </div>
-    </div>
 
 </x-oops-layout>  
 <!--code xử lý nhấn nút thêm-->
 <script>
-    $(document).ready(function(){
+        $(document).ready(function(){
         $("#add-to-cart").click(function(){
-            id = "{{$data->id}}";
-            num = $("#product-number").val()
+            let id = "{{$data->id}}";
+            let num = $("#product-number").val();
             $.ajax({
-                type:"POST",
-                dataType:"json",
-                url: "{{route('cartadd')}}",
-                data:{"_token": "{{ csrf_token() }}","id":id,"num":num},
-                beforeSend:function(){
-                },
-                success:function(data){
-                $("#cart-number-product").html(data);
-                },
-                error: function (xhr,status,error){
-                },
-                complete: function(xhr,status){
-                }
+                    type:"POST",
+                    dataType:"json",
+                    url: "{{route('cartadd')}}",
+                    data:{"_token": "{{ csrf_token() }}","id":id,"num":num},
+                    beforeSend:function(){
+                    },
+                    success:function(data){
+                        $("#cart-number-product").html(data);
+                    },
+                    error: function (xhr,status,error){
+                    },
+                    complete: function(xhr,status){
+                    }
+                });
             });
         });
-    });
 </script>
 <style>
     /*Style cho mấy cái nút */
