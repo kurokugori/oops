@@ -28,7 +28,7 @@
 
 </x-oops-layout>  
 <!--code xử lý nhấn nút thêm-->
-<script>
+    <script>
         $(document).ready(function(){
         $("#add-to-cart").click(function(){
             let id = "{{$data->id}}";
@@ -50,7 +50,7 @@
                 });
             });
         });
-</script>
+    </script>
 <style>
     /*Style cho mấy cái nút */
     .btn-add-to-cart {

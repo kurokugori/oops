@@ -301,7 +301,6 @@
                     <i class="fa fa-cart-arrow-down fa-2x mr-2 mt-3" aria-hidden="true"></i>
                 </a>
             </div>
-
  <!-- kết thúc biểu tượng giỏ hàng-->
                 {{-- Right Navigation (User Auth) --}}
                 <ul class="navbar-nav">

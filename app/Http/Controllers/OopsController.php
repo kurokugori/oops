@@ -89,4 +89,99 @@ class OopsController extends Controller
         // Trả về view với dữ liệu giỏ hàng và sản phẩm
         return view("giaodiennguoidung.order", compact("quantity", "data"));
     } 
+
+    public function cartdelete(Request $request)
+    {
+        $request->validate([
+        "id"=>["required","numeric"]
+        ]);
+        $id = $request->id;
+        $total = 0;
+        $cart = [];
+        if(session()->has('cart'))
+        {
+        $cart = session()->get("cart");
+        unset($cart[$id]);
+        }
+        session()->put("cart",$cart);
+        return redirect()->route('order');
+    }
+
+    public function ordercreate(Request $request)
+    {
+        $request->validate([
+        "hinh_thuc_thanh_toan"=>["required","numeric"]
+        ]);
+        $data = [];
+        $quantity = [];
+        if(session()->has('cart'))
+        {
+        $order = ["ngay_dat_hang"=>DB::raw("now()"),"tinh_trang"=>1,
+        "hinh_thuc_thanh_toan"=>$request->hinh_thuc_thanh_toan,
+        "user_id"=>Auth::user()->id];
+        DB::transaction(function () use ($order) {
+        $id_don_hang = DB::table("don_hang")->insertGetId($order);
+        $cart = session("cart");
+        $list_product = "";
+        $quantity = [];
+        foreach($cart as $id=>$value)
+        {
+        $quantity[$id] = $value;
+        $list_product .=$id.", ";
+        }
+        $list_product = substr($list_product, 0,strlen($list_product)-2);
+        $data = DB::table("products")
+            ->whereRaw("id in ($list_product_str)") // Dùng whereRaw để xử lý chuỗi ID
+            ->get();        
+        $detail = [];
+        foreach($data as $row)
+        {
+        $detail[] = ["ma_don_hang"=>$id_don_hang,"product_id"=>$row->id,
+        "so_luong"=>$quantity[$row->id],"don_gia"=>$row->gia_ban];
+        }
+        DB::table("chi_tiet_don_hang")->insert($detail);
+        session()->forget('cart');
+        });
+        }
+        return view("giaodiennguoidung.order", compact('data','quantity'));
+    }
+
+    /*public function ordercreate(Request $request)
+    {
+        $request->validate([
+            "hinh_thuc_thanh_toan"=>["required","numeric"]
+        ]);
+        $data = [];
+        $quantity = [];
+        if(session()->has('cart'))
+        {
+            $order = ["order_date"=>DB::raw("now()"),"order_status"=>1,
+                    "hinh_thuc_thanh_toan"=>$request->hinh_thuc_thanh_toan,//thêm cột hinh_thuc_thanh_toan trong bảng order(smallint)
+                    "user_id"=>Auth::user()->id];
+            DB::transaction(function () use ($order) {
+            $id_don_hang = DB::table("orders")->insertGetId($order);
+            $cart = session("cart");
+            $list_product = "";
+            $quantity = [];
+            foreach($cart as $id=>$value)
+        {
+            $quantity[$id] = $value;
+            $list_product .=$id.", ";
+        }
+        $list_product = substr($list_product, 0,strlen($list_product)-2);
+        $data = DB::table("products")
+                    ->whereRaw("id in ($list_product_str)") // Dùng whereRaw để xử lý chuỗi ID
+                    ->get();
+        $detail = [];
+        foreach($data as $row)
+        {
+            $detail[] = ["order_id"=>$id_don_hang,"product_id"=>$row->id,
+            "quantity"=>$quantity[$row->id],"unit_price"=>$row->gia_ban];
+        }
+            DB::table("order_details")->insert($detail);
+            session()->forget('cart');
+        });
+        }
+        return view("giaodiennguoidung.order", compact('data','quantity'));
+    }*/
 }
