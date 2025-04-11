@@ -159,10 +159,6 @@ class OopsController extends Controller
 
             $data = $products;
         }
-<<<<<<< Updated upstream
-        return view("giaodiennguoidung.order", compact('data','quantity'));
-    }
-=======
 
         return view("giaodiennguoidung.order", compact('data', 'quantity'));
     }*/
@@ -243,5 +239,4 @@ class OopsController extends Controller
         return view('giaodiennguoidung.checkout'); // form nhập thông tin
     }
 
->>>>>>> Stashed changes
 }

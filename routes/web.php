@@ -86,10 +86,13 @@ Route::get('/order',[OopsController::class, 'order'])->name('order');
 Route::post('/cart/add',[OopsController::class, 'cartadd'])->name('cartadd');
 // Route xóa sản phẩm trong giỏ hàng
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Route::post('/cart/delete','App\Http\Controllers\OopsController@cartdelete')->name('cartdelete');
 Route::post('/order/create','App\Http\Controllers\OopsController@ordercreate')
           ->middleware('auth')->name('ordercreate');
 =======
+=======
+>>>>>>> Stashed changes
 Route::post('/cart/delete',[OopsController::class, 'cartdelete'])->name('cartdelete');
 
 /*Route::post('/order/create','App\Http\Controllers\OopsController@ordercreate')
@@ -102,5 +105,9 @@ Route::get('/checkout', [OopsController::class, 'showCheckoutForm'])
           ->middleware('auth')->name('checkout');
 Route::post('/save-order', [OopsController::class, 'saveOrder'])
           ->middleware('auth')->name('saveorder');
+<<<<<<< Updated upstream
+          
+>>>>>>> Stashed changes
+=======
           
 >>>>>>> Stashed changes
