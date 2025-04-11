@@ -141,6 +141,7 @@ class OopsController extends Controller
                 'dia_chi' => $request->dia_chi,
                 'ghi_chu' => $request->ghi_chu,
                 'user_id' => Auth::id(),
+                'trang_thai' => 'Chờ xác nhận',
             ]);
 
             // Chi tiết đơn hàng
