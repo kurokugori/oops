@@ -88,3 +88,9 @@ Route::post('/cart/add','App\Http\Controllers\OopsController@cartadd')->name('ca
 Route::post('/cart/delete','App\Http\Controllers\OopsController@cartdelete')->name('cartdelete');
 Route::post('/order/create','App\Http\Controllers\OopsController@ordercreate')
           ->middleware('auth')->name('ordercreate');
+
+//Route đặt hàng
+Route::post('/addorder','App\Http\Controllers\OopsController@addorder')
+          ->middleware('auth')->name('addorder');
+Route::post('/saveorder','App\Http\Controllers\OopsController@saveorder')
+          ->middleware('auth')->name('saveorder');

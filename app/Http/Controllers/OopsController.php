@@ -139,4 +139,36 @@ class OopsController extends Controller
         }
         return view("giaodiennguoidung.order", compact('data','quantity'));
     }
+
+    public function addorder()
+    {
+        $genre = Genre::all();
+        return view('movie.add', [
+            'title' => 'Thêm phim mới',
+            'genre' => $genre,
+        ]);
+    }
+
+    public function savemovie(Request $request)
+    {
+        $request->validate([
+            'movie_name' => 'required|string|max:255',
+            'movie_name_vn' => 'required|string|max:255',
+            'image_link' => 'required|url',
+            'release_date' => 'required|date',
+            'overview_vn' => 'required|string',
+        ]);
+
+        $data = [
+            'movie_name' => $request->input('movie_name'),
+            'movie_name_vn' => $request->input('movie_name_vn'),
+            'image_link' => $request->input('image_link'),
+            'release_date' => $request->input('release_date'),
+            'overview_vn' => $request->input('overview_vn'),
+        ];
+
+        DB::table('movie')->insert($data);
+
+        return redirect()->route('addmovie')->with('status', 'Thêm phim thành công!');
+    }
 }
