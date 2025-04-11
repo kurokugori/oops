@@ -102,10 +102,6 @@ class OopsController extends Controller
         session()->put("cart",$cart);
         return redirect()->route('order');
     }
-
- 
-
-
 // hàm sửa từ oderCreate để thêm phần nhập thông tin
     public function saveOrder(Request $request)
     {
