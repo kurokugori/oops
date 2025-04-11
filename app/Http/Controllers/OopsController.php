@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use App\Models\Product; 
+use App\Models\Comment; 
+use App\Models\User;
 
 class OopsController extends Controller
 {
@@ -22,10 +25,29 @@ class OopsController extends Controller
 
     function chitiet($id)
     {
-        $data = DB::table('products')->where('id', $id)->first();
         
-        return view("giaodiennguoidung.chitiet", compact("data"));
+        $data = DB::table('products')->where('id', $id)->first(); 
+
+        // Khởi tạo biến comments là collection rỗng
+        $comments = collect(); 
+
+        
+        if ($data) {
+            // Lấy comments liên quan đến sản phẩm này
+            // Sắp xếp mới nhất trước và lấy kèm tên người dùng
+            $comments = Comment::where('product_id', $id)
+                               ->with('user:id,first_name,last_name') // Eager load user info
+                               ->latest() // Sắp xếp theo mới nhất
+                               ->get(); // Lấy tất cả comments cho sản phẩm này
+        }
+
+        //  Lấy title 
+        $title = $data->product_name ?? 'Chi tiết sản phẩm'; // Lấy title nếu $data không null
+
+        //  Truyền cả $data (thông tin sản phẩm, có thể null) và $comments vào view
+        return view("giaodiennguoidung.chitiet", compact("title", "data", "comments"));
     }
+
 
     public function search(Request $request)
     {
