@@ -1,4 +1,5 @@
 <x-oops-layout>
+
     <x-slot name="title">Thông tin đơn hàng</x-slot>
 
     <form method="POST" action="{{ route('saveorder') }}" style="width: 50%; margin: 0 auto;">
@@ -6,13 +7,16 @@
         <h4 class="text-center text-primary mb-4">Thông tin người nhận</h4>
 
         <label>Tên người nhận</label>
-        <input type="text" class="form-control" name="ten_nguoi_nhan" required>
+        <input type="text" class="form-control" name="ten_nguoi_nhan"
+            value="{{ old('ten_nguoi_nhan', Auth::user()->first_name ?? '') }}" required> <!--tự động điền Tên theo bảng Users -->
 
         <label>Số điện thoại</label>
-        <input type="text" class="form-control" name="so_dien_thoai" required>
+        <input type="text" class="form-control" name="so_dien_thoai"
+            value="{{ old('so_dien_thoai', Auth::user()->phone ?? '') }}" required> <!--tự động điền Số điện thoại theo bảng Users -->
 
         <label>Địa chỉ</label>
-        <input type="text" class="form-control" name="dia_chi" required>
+        <input type="text" class="form-control" name="dia_chi"
+            value="{{ old('dia_chi', Auth::user()->address ?? '') }}" required><!--tự động điền Địa chỉ theo bảng Users -->
 
         <label>Ghi chú</label>
         <textarea name="ghi_chu" class="form-control" rows="3"></textarea>
