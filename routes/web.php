@@ -81,10 +81,26 @@ Route::middleware(['auth'])->prefix('tai-khoan')->group(function () { // *** Th�
 // Route::get('/dashboard', function () { /* ... */ })->name('dashboard'); // Xóa hoặc sửa route dashboard cũ nếu không dùng đến
 
 // Route cho trang đặt hàng
-Route::get('/order','App\Http\Controllers\OopsController@order')->name('order');
+Route::get('/order',[OopsController::class, 'order'])->name('order');
 // Route thêm vào giỏ hàng
-Route::post('/cart/add','App\Http\Controllers\OopsController@cartadd')->name('cartadd');
+Route::post('/cart/add',[OopsController::class, 'cartadd'])->name('cartadd');
 // Route xóa sản phẩm trong giỏ hàng
+<<<<<<< Updated upstream
 Route::post('/cart/delete','App\Http\Controllers\OopsController@cartdelete')->name('cartdelete');
 Route::post('/order/create','App\Http\Controllers\OopsController@ordercreate')
           ->middleware('auth')->name('ordercreate');
+=======
+Route::post('/cart/delete',[OopsController::class, 'cartdelete'])->name('cartdelete');
+
+/*Route::post('/order/create','App\Http\Controllers\OopsController@ordercreate')
+          ->middleware('auth')->name('ordercreate');*/
+
+//Route đặt hàng
+//Route::post('/luu-don-hang', [OopsController::class, 'saveOrder'])->name('saveorder');
+
+Route::get('/checkout', [OopsController::class, 'showCheckoutForm'])
+          ->middleware('auth')->name('checkout');
+Route::post('/save-order', [OopsController::class, 'saveOrder'])
+          ->middleware('auth')->name('saveorder');
+          
+>>>>>>> Stashed changes

@@ -2,6 +2,18 @@
     <x-slot name='title'>
         Đặt hàng
     </x-slot>
+    <!-- thông báo đặt hàng được hay không-->
+        @if (session('status'))
+        <div style="background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+            {{ session('status') }}
+        </div>
+        @endif
+
+        @if (session('error'))
+            <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                {{ session('error') }}
+            </div>
+        @endif
 
     <div>
         <div style='color:#15c; font-weight:bold;font-size:15px;text-align:center'>DANH SÁCH SẢN PHẨM</div>
@@ -71,7 +83,9 @@
                 <div style='font-weight:bold;width:70%;margin:0 auto;text-align:center;'>
                     @auth
                         @if(count($data)>0)
-                        <form method='post' action = "{{route('ordercreate')}}" >
+                        <form id="checkout-form" method="get" action="{{ route('checkout') }}">
+                                <input type="hidden" name="selected_products_json" id="selected_products_json">
+                                <input type="hidden" name="quantities_json" id="quantities_json">
                             Hình thức thanh toán <br>
                             <div class='d-inline-flex'>
                                 <select name='hinh_thuc_thanh_toan' class='form-control form-control-sm'>
@@ -81,7 +95,24 @@
                                 </select>
                             </div><br>
                             <input type='submit' class='btn btn-sm btn-primary mt-1' value='ĐẶT HÀNG'>
-                            {{ csrf_field() }}
+                            <!--đoạn Javascript để submit đầy đủ dữ liệu --> 
+                            <script>
+                                document.getElementById('checkout-form').addEventListener('submit', function (e) {
+                                    let selectedProducts = [];
+                                    let quantities = {};
+
+                                    document.querySelectorAll('input[name="selected_products[]"]:checked').forEach(function (checkbox) {
+                                        let id = checkbox.value;
+                                        let row = checkbox.closest('tr');
+                                        let qty = row.querySelector('input[type="number"]').value;
+                                        selectedProducts.push(id);
+                                        quantities[id] = qty;
+                                    });
+
+                                    document.getElementById('selected_products_json').value = JSON.stringify(selectedProducts);
+                                    document.getElementById('quantities_json').value = JSON.stringify(quantities);
+                                });
+                            </script>
                         </form>
                         @else
                             Vui lòng chọn sản phẩm cần mua
