@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use App\Models\DonHang;
+use Illuminate\Support\Facades\Auth;
 
 class OopsController extends Controller
 {
@@ -101,74 +103,81 @@ class OopsController extends Controller
         return redirect()->route('order');
     }
 
-    public function ordercreate(Request $request)
+ 
+
+
+// hàm sửa từ oderCreate để thêm phần nhập thông tin
+    public function saveOrder(Request $request)
     {
         $request->validate([
-            "hinh_thuc_thanh_toan"=>["required","numeric"]
+            'ten_nguoi_nhan' => 'required|string|max:255',
+            'so_dien_thoai' => 'required|string|max:20',
+            'dia_chi' => 'required|string|max:255',
+            'hinh_thuc_thanh_toan' => 'required|in:1,2',
         ]);
-        $data = [];
-        $quantity = [];
-        if(session()->has('cart'))
-        {
-            $order = ["ngay_dat_hang"=>DB::raw("now()"),"tinh_trang"=>1,
-                    "hinh_thuc_thanh_toan"=>$request->hinh_thuc_thanh_toan,
-                    "user_id"=>Auth::user()->id];
-            DB::transaction(function () use ($order) {
-            $id_don_hang = DB::table("don_hang")->insertGetId($order);
-            $cart = session("cart");
-            $list_product = "";
-            $quantity = [];
-            foreach($cart as $id=>$value)
-        {
-            $quantity[$id] = $value;
-            $list_product .=$id.", ";
+
+        $selected_products = session('selected_products');
+        $quantities = session('quantities');
+
+        if (!$selected_products || !$quantities || count($selected_products) === 0) {
+            return redirect()->route('order')->with('error', 'Chưa chọn sản phẩm nào để đặt hàng.');
         }
-            $list_product = substr($list_product, 0,strlen($list_product)-2);
-            $data = DB::table("products")
-                ->whereRaw("id in ($list_product_str)") // Dùng whereRaw để xử lý chuỗi ID
-                ->get();        
-            $detail = [];
-            foreach($data as $row)
-        {
-            $detail[] = ["ma_don_hang"=>$id_don_hang,"product_id"=>$row->id,
-                        "so_luong"=>$quantity[$row->id],"don_gia"=>$row->gia_ban];
+
+        // Lấy thông tin sản phẩm
+        $products = DB::table('products')
+            ->whereIn('id', $selected_products)
+            ->get();
+
+        DB::beginTransaction();
+
+        try {
+            // Tạo đơn hàng
+            $orderId = DB::table('don_hang')->insertGetId([
+                'ngay_dat_hang' => now(),
+                'tinh_trang' => 1,
+                'hinh_thuc_thanh_toan' => $request->hinh_thuc_thanh_toan,
+                'ten_nguoi_nhan' => $request->ten_nguoi_nhan,
+                'so_dien_thoai' => $request->so_dien_thoai,
+                'dia_chi' => $request->dia_chi,
+                'ghi_chu' => $request->ghi_chu,
+                'user_id' => Auth::id(),
+                'trang_thai' => 'Chờ xác nhận',
+            ]);
+
+            // Chi tiết đơn hàng
+            $orderDetails = [];
+            foreach ($products as $product) {
+                $orderDetails[] = [
+                    'ma_don_hang' => $orderId,
+                    'product_id' => $product->id,
+                    'so_luong' => $quantities[$product->id],
+                    'don_gia' => $product->unit_price,
+                ];
+            }
+
+            DB::table('chi_tiet_don_hang')->insert($orderDetails);
+
+            DB::commit();
+
+            // Xoá session
+            session()->forget(['selected_products', 'quantities', 'cart']);
+
+            return redirect()->route('order')->with('status', 'Đặt hàng thành công!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Đã xảy ra lỗi khi đặt hàng. Vui lòng thử lại.');
         }
-                DB::table("chi_tiet_don_hang")->insert($detail);
-                session()->forget('cart');
-            });
-        }
-        return view("giaodiennguoidung.order", compact('data','quantity'));
     }
-
-    public function addorder()
+//hàm show bảng nhập thông tin
+    public function showCheckoutForm(Request $request)
     {
-        $genre = Genre::all();
-        return view('movie.add', [
-            'title' => 'Thêm phim mới',
-            'genre' => $genre,
-        ]);
-    }
+        // Lưu vào session để bước sau dùng
+            session([
+                'selected_products' => json_decode($request->selected_products_json, true),
+                'quantities' => json_decode($request->quantities_json, true),
+                'hinh_thuc_thanh_toan' => $request->hinh_thuc_thanh_toan
+            ]);
 
-    public function savemovie(Request $request)
-    {
-        $request->validate([
-            'movie_name' => 'required|string|max:255',
-            'movie_name_vn' => 'required|string|max:255',
-            'image_link' => 'required|url',
-            'release_date' => 'required|date',
-            'overview_vn' => 'required|string',
-        ]);
-
-        $data = [
-            'movie_name' => $request->input('movie_name'),
-            'movie_name_vn' => $request->input('movie_name_vn'),
-            'image_link' => $request->input('image_link'),
-            'release_date' => $request->input('release_date'),
-            'overview_vn' => $request->input('overview_vn'),
-        ];
-
-        DB::table('movie')->insert($data);
-
-        return redirect()->route('addmovie')->with('status', 'Thêm phim thành công!');
+        return view('giaodiennguoidung.checkout'); // form nhập thông tin
     }
 }
