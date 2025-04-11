@@ -104,64 +104,7 @@ class OopsController extends Controller
     }
 
  
-//hàm oderCreate mới
-   /* public function ordercreate(Request $request)
-    {
-        $request->validate([
-            "hinh_thuc_thanh_toan" => ["required", "numeric"]
-        ]);
 
-        $data = [];
-        $quantity = [];
-
-        if (session()->has('cart')) {
-            $cart = session("cart");
-
-            // Danh sách ID sản phẩm (key của mảng cart)
-            $list_product = implode(',', array_map(function ($id) {
-                return "'" . addslashes($id) . "'";
-            }, array_keys($cart))); // thêm dấu nháy đơn quanh từng ID
-
-            // Lấy thông tin sản phẩm từ database
-            $products = DB::table("products")
-                ->whereRaw("id IN ($list_product)")
-                ->get();
-
-            // Tạo dữ liệu đơn hàng
-            $order = [
-                "ngay_dat_hang" => DB::raw("now()"),
-                "tinh_trang" => 1,
-                "hinh_thuc_thanh_toan" => $request->hinh_thuc_thanh_toan,
-                "user_id" => Auth::user()->id,
-            ];
-
-            DB::transaction(function () use ($order, $products, $cart) {
-                $id_don_hang = DB::table("don_hang")->insertGetId($order);
-
-                $detail = [];
-                foreach ($products as $product) {
-                    $detail[] = [
-                        "ma_don_hang" => $id_don_hang,
-                        "product_id" => $product->id,
-                        "so_luong" => $cart[$product->id],
-                        "don_gia" => $product->unit_price,
-                    ];
-                }
-
-                DB::table("chi_tiet_don_hang")->insert($detail);
-                session()->forget('cart');
-            });
-
-            // Chuẩn bị dữ liệu gửi view
-            foreach ($products as $product) {
-                $quantity[$product->id] = $cart[$product->id];
-            }
-
-            $data = $products;
-        }
-
-        return view("giaodiennguoidung.order", compact('data', 'quantity'));
-    }*/
 
 // hàm sửa từ oderCreate để thêm phần nhập thông tin
     public function saveOrder(Request $request)
