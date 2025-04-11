@@ -120,7 +120,7 @@ class OopsController extends Controller
         $quantities = session('quantities');
 
         if (!$selected_products || !$quantities || count($selected_products) === 0) {
-            return redirect()->route('order')->with('error', 'Không có sản phẩm nào để đặt hàng.');
+            return redirect()->route('order')->with('error', 'Chưa chọn sản phẩm nào để đặt hàng.');
         }
 
         // Lấy thông tin sản phẩm
