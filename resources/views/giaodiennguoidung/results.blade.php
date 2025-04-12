@@ -22,6 +22,11 @@
                             </b>
                             <i>Giá bán: {{number_format($row->unit_price,0,",",".")}}đ</i>
                         </a>
+                        <div class='btn-add-product'>
+                            <button class='btn btn-success btn-sm mb-1 add-product' product_id="{{$row->id}}">
+                                Thêm vào giỏ hàng
+                            </button>
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -32,6 +37,30 @@
             <p class="text-muted mt-4">Không tìm thấy sản phẩm phù hợp.</p>
         @endif
     </div>
+
+    <script>
+        $(document).ready(function(){
+        $(".add-product").click(function(){
+        let id = $(this).attr("product_id");
+        let num = 1;
+            $.ajax({
+                type:"POST",
+                dataType:"json",
+                url: "{{route('cartadd')}}",
+                data:{"_token": "{{ csrf_token() }}","id":id,"num":num},
+                beforeSend:function(){
+                },
+                success:function(data){
+                    $("#cart-number-product").html(data);
+                },
+                error: function (xhr,status,error){
+                },
+                complete: function(xhr,status){
+                }
+                });
+            });
+        });
+    </script>
 </x-oops-layout>  
 
 <style>
