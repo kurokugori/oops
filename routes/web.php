@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\OopsController; // *** Thêm dòng này ***
-
+use App\Http\Controllers\CommentController;
 /*
 Route::get('/', function () {
     return view('welcome');
@@ -24,6 +24,9 @@ Route::get('/trangchu/phone_brands/{id}', [OopsController::class, 'phone_brands'
 // Route xử lý trang chi tiết sản phẩm
 Route::get('/trangchu/chi_tiet/{id}', [OopsController::class, 'chitiet']) // *** Cập nhật cú pháp ***
       ->name('product.detail'); // *** Nên đặt tên cụ thể hơn ***
+
+//Route cho comment
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
 
 // Route xử lý cho tìm kiếm sản phẩm
 Route::get('/search', [OopsController::class, 'search'])->name('search');
