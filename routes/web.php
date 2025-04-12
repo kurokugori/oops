@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\OopsController; // *** Thêm dòng này ***
-
+use App\Http\Controllers\CommentController;
 /*
 Route::get('/', function () {
     return view('welcome');
@@ -24,6 +24,9 @@ Route::get('/trangchu/phone_brands/{id}', [OopsController::class, 'phone_brands'
 // Route xử lý trang chi tiết sản phẩm
 Route::get('/trangchu/chi_tiet/{id}', [OopsController::class, 'chitiet']) // *** Cập nhật cú pháp ***
       ->name('product.detail'); // *** Nên đặt tên cụ thể hơn ***
+
+//Route cho comment
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
 
 // Route xử lý cho tìm kiếm sản phẩm
 Route::get('/search', [OopsController::class, 'search'])->name('search');
@@ -85,6 +88,7 @@ Route::get('/order',[OopsController::class, 'order'])->name('order');
 // Route thêm vào giỏ hàng
 Route::post('/cart/add',[OopsController::class, 'cartadd'])->name('cartadd');
 // Route xóa sản phẩm trong giỏ hàng
+
 Route::post('/cart/delete',[OopsController::class, 'cartdelete'])->name('cartdelete');
 
 /*Route::post('/order/create','App\Http\Controllers\OopsController@ordercreate')
@@ -98,3 +102,4 @@ Route::get('/checkout', [OopsController::class, 'showCheckoutForm'])
 Route::post('/save-order', [OopsController::class, 'saveOrder'])
           ->middleware('auth')->name('saveorder');
           
+
