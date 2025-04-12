@@ -5,6 +5,7 @@
     </x-slot> 
 
     <div class="oops-detail">
+        <!-- Thông tin sản phẩm -->
             <div class="row">
                 <div class="col-md-4">
                     <img src="{{asset('anh/'.$data->image_url)}}" class="img-fluid">
@@ -25,7 +26,78 @@
                     </div>
                 </div>
             </div>
+        <!-- Sản phẩm tương tự -->
+            <div class="mt-5">           
+                <h4>Sản phẩm tương tự</h4>
+                <div id="relatedCarousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class='list-oops'>
+                                @foreach($related->slice(0, 4) as $item)
+                                    <div class='oops'>
+                                        <a href="{{url('trangchu/chi_tiet/'.$item->id)}}" style="text-decoration: none; color: inherit;">
+                                            <div class="product-frame">
+                                                <div class="product-text">
+                                                        <h5>OOPS</h5>
+                                                </div>
+                                                <img src="{{asset('anh/'.$item->image_url)}}" class="product-image">
+                                            </div><br>
+                                            <b class="product-name">
+                                                {{ \Illuminate\Support\Str::limit($item->product_name, 80) }}
+                                            </b>
+                                            <i>Giá bán: {{number_format($item->unit_price,0,",",".")}}đ</i>
+                                        </a>
+                                        <div class='btn-add-product'>
+                                            <button class='btn btn-success btn-sm mb-1 add-product' product_id="{{$item->id}}">
+                                                Thêm vào giỏ hàng
+                                            </button>
+                                        </div>
+                                        
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
 
+                        <div class="carousel-item">
+                            <div class='list-oops'>
+                                @foreach($related->slice(4, 4) as $item)
+                                    <div class='oops'>
+                                        <a href="{{url('trangchu/chi_tiet/'.$item->id)}}" style="text-decoration: none; color: inherit;">
+                                            <div class="product-frame">
+                                                <div class="product-text">
+                                                        <h5>OOPS</h5>
+                                                </div>
+                                                <img src="{{asset('anh/'.$item->image_url)}}" class="product-image">
+                                            </div><br>
+                                            <b class="product-name">
+                                                {{ \Illuminate\Support\Str::limit($item->product_name, 80) }}
+                                            </b>
+                                            <i>Giá bán: {{number_format($item->unit_price,0,",",".")}}đ</i>
+                                        </a>
+                                        <div class='btn-add-product'>
+                                            <button class='btn btn-success btn-sm mb-1 add-product' product_id="{{$item->id}}">
+                                                Thêm vào giỏ hàng
+                                            </button>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Điều khiển trước/sau -->
+                    <a class="carousel-control-prev" href="#relatedCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Trước</span>
+                    </a>
+                    <a class="carousel-control-next" href="#relatedCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Sau</span>
+                    </a>
+                </div>
+            </div>
+
+    </div>
 </x-oops-layout>  
 <!--code xử lý nhấn nút thêm-->
     <script>
@@ -50,6 +122,37 @@
                 });
             });
         });
+
+
+        $(document).ready(function(){
+            // Thay đổi thời gian chuyển đổi thành 5 giây (5000ms)
+            $('#relatedCarousel').carousel({
+                interval: 5000
+            });
+        });
+
+        $(document).ready(function(){
+        $(".add-product").click(function(){
+        let id = $(this).attr("product_id");
+        let num = 1;
+            $.ajax({
+                type:"POST",
+                dataType:"json",
+                url: "{{route('cartadd')}}",
+                data:{"_token": "{{ csrf_token() }}","id":id,"num":num},
+                beforeSend:function(){
+                },
+                success:function(data){
+                    $("#cart-number-product").html(data);
+                },
+                error: function (xhr,status,error){
+                },
+                complete: function(xhr,status){
+                }
+                });
+            });
+        });
+
     </script>
 <style>
     /*Style cho mấy cái nút */
@@ -107,6 +210,15 @@
         border: 1px solid #eee;
         padding: 5px;
     }
+    .list-oops{
+        display:grid;
+        grid-template-columns:repeat(4,24%);
+    }
+    .oops {
+        margin:10px;
+        text-align:center;
+    }
+
 </style>
 
 

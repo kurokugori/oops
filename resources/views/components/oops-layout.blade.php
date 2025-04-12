@@ -201,11 +201,11 @@
         .product-item .btn { font-size: 0.85em; }
 
         .product-table 
-            {
-                border-collapse: collapse;
-                width: 70%;
-                margin: 0 auto;
-            }
+        {
+            border-collapse: collapse;
+            width: 70%;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <script>

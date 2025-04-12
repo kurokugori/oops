@@ -25,8 +25,12 @@ class OopsController extends Controller
     function chitiet($id)
     {
         $data = DB::table('products')->where('id', $id)->first();
-        
-        return view("giaodiennguoidung.chitiet", compact("data"));
+        $related = DB::table('products')
+                        ->where('phone_brand_id', $data->phone_brand_id) 
+                        ->where('id', '!=', $id) // bỏ qua chính nó
+                        ->limit(8)
+                        ->get();
+        return view("giaodiennguoidung.chitiet", compact("data", "related"));
     }
 
     public function search(Request $request)
