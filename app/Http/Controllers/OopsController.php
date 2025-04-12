@@ -8,7 +8,7 @@ use Illuminate\Pagination\Paginator;
 
 use App\Models\DonHang;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Product; 
 
 use App\Models\Comment; 
 use App\Models\User;
