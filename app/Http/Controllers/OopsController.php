@@ -215,5 +215,4 @@ class OopsController extends Controller
         return view('giaodiennguoidung.checkout'); // form nhập thông tin
     }
 
-main
 }
