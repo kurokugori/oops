@@ -6,7 +6,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Comment;
 
 class User extends Authenticatable
 {
@@ -19,12 +18,9 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'first_name',   // 
-        'last_name',    // 
+        'name',
         'email',
         'password',
-        'phone',        // thu thập và lưu phone khi đăng ký
-        'address',      // thu thập và lưu address khi đăng ký
     ];
 
     /**
@@ -49,14 +45,4 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
-
-    // ... use statements, $fillable, $hidden, $casts ...
-
-    // Đổi tên relationship và trỏ đến Comment model
-    public function comments() // <<< ĐỔI TÊN RELATIONSHIP
-    {
-        return $this->hasMany(Comment::class); // <<< Trỏ đến Comment::class
-    }
-
 }
