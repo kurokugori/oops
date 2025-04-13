@@ -8,7 +8,9 @@
         <!-- Thông tin sản phẩm -->
             <div class="row">
                 <div class="col-md-4">
-                    <img src="{{asset('anh/'.$data->image_url)}}" class="img-fluid">
+                    <div class="product-frame">
+                        <img src="{{asset('anh/'.$data->image_url)}}" class="img-fluid">
+                    </div><br>
                 </div>
                 <div class="col-md-8">
                     <h3>{{ $data->product_name }}</h3>
@@ -26,8 +28,8 @@
                     </div>
                 </div>
             </div>
-</div>
-{{-- ======================================= --}}
+
+            {{-- ======================================= --}}
             {{-- === BẮT ĐẦU PHẦN BÌNH LUẬN === --}}
             {{-- ======================================= --}}
             <div class="product-comments mt-4">
@@ -95,8 +97,8 @@
             {{-- === KẾT THÚC PHẦN BÌNH LUẬN === --}}
 
         
-  <!-- Sản phẩm tương tự -->
-  <div class="mt-5">           
+            <!-- Sản phẩm tương tự -->
+            <div class="mt-5">           
                 <h4>Sản phẩm tương tự</h4>
                 <div id="relatedCarousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
@@ -152,6 +154,7 @@
                                 @endforeach
                             </div>
                         </div>
+
                     </div>
 
                     <!-- Điều khiển trước/sau -->
@@ -163,12 +166,13 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">Sau</span>
                     </a>
+
                 </div>
+
             </div>
 
     </div>
 
-    
 </x-oops-layout>  
 <!--code xử lý nhấn nút thêm-->
     <script>
