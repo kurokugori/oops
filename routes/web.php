@@ -1,68 +1,26 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AccountController;
-use App\Http\Controllers\OopsController; // *** Thêm dòng này ***
-use App\Http\Controllers\CommentController;
-/*
-Route::get('/', function () {
+use App\Http\Controllers\AdminController;
+/*Route::get('/', function () {
     return view('welcome');
-}); // *** Có thể xóa route welcome mặc định này nếu không dùng ***
-*/
-
-// --- Routes Chính ---
-
-// Route xử lý logic hiển thị trang chủ
-Route::get('/trangchu', [OopsController::class, 'trangchu']) // *** Cập nhật cú pháp & Thêm tên ***
-     ->name('trangchu');
-
-// Route xử lý trang danh sách sản phẩm theo hãng
-Route::get('/trangchu/phone_brands/{id}', [OopsController::class, 'phone_brands']) // *** Cập nhật cú pháp ***
-     ->name('phone_brands.show'); // *** Nên đặt tên cụ thể hơn ***
-
-// Route xử lý trang chi tiết sản phẩm
-Route::get('/trangchu/chi_tiet/{id}', [OopsController::class, 'chitiet']) // *** Cập nhật cú pháp ***
-      ->name('product.detail'); // *** Nên đặt tên cụ thể hơn ***
-
-//Route cho comment
-Route::post('/comments', [CommentController::class, 'store'])->name('comments.store')->middleware('auth');
-
-// Route xử lý cho tìm kiếm sản phẩm
-Route::get('/search', [OopsController::class, 'search'])->name('search');
-
-// Route gốc '/' - Điều hướng dựa trên trạng thái đăng nhập
-Route::get('/', function () {
-    if (auth()->check()) {
-        // Bây giờ đã có route tên 'trangchu' để chuyển hướng đến
-        return redirect()->route('trangchu');
-    }
-    // Chuyển hướng đến trang đăng nhập/đăng ký nếu là khách
-    return redirect()->route('login_register.show');
-})->name('home'); // Route gốc này tên là 'home'
+});*/
 
 
-// --- Routes cho Xác thực ---
+Route::get('/login', [AdminController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AdminController::class, 'login']);
+Route::get('/', [AdminController::class, 'index']);
 
-// Hiển thị trang chứa cả form Đăng nhập và Đăng ký
-Route::get('/login-register', [AuthController::class, 'showLoginRegisterForm'])
-     ->name('login_register.show')
-     ->middleware('guest');
+Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
+Route::get('/index', [AdminController::class, 'index'])->name('admin.index');
+Route::get('/products', [AdminController::class, 'manageProduct'])->name('admin.products');
 
-// Xử lý submit form Đăng nhập
-Route::post('/login', [AuthController::class, 'login'])
-     ->name('login.perform')
-     ->middleware('guest');
+Route::get('/orders', [AdminController::class, 'manageOrders'])->name('admin.orders');
+Route::get('/revenue', [AdminController::class, 'manageRevenue'])->name('admin.revenue');
 
-// Xử lý submit form Đăng ký
-Route::post('/register', [AuthController::class, 'register'])
-     ->name('register.perform')
-     ->middleware('guest');
+Route::get('/create', [AdminController::class, 'oopscreate'])->name("oopscreate");
 
-// Xử lý đăng xuất
-Route::post('/logout', [AuthController::class, 'logout'])
-     ->name('logout')
-     ->middleware('auth');
+Route::post('/save/{action}', [AdminController::class, 'oopssave'])->name("oopssave");
 
 
 // --- Routes cho khu vực tài khoản (cần đăng nhập) ---
@@ -102,4 +60,5 @@ Route::get('/checkout', [OopsController::class, 'showCheckoutForm'])
 Route::post('/save-order', [OopsController::class, 'saveOrder'])
           ->middleware('auth')->name('saveorder');
           
+
 
