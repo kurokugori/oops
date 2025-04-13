@@ -48,7 +48,10 @@
                     <form action="{{ route('admin.orders.updateStatus', $row->ma_don_hang) }}" method="POST" style="display: flex; flex-direction: column; align-items: center;">
                     @csrf
                     @method('PUT')
-                    <select name="trang_thai" class="form-select form-select-sm status-dropdown" onchange="this.form.submit()">
+                    <select name="trang_thai"
+                            class="form-select form-select-sm status-dropdown"
+                            onchange="this.form.submit(); updateSelectColor(this);"
+                            style="color: white;">
                         <option value="Chờ xác nhận" {{ $row->trang_thai == 'Chờ xác nhận' ? 'selected' : '' }}>Chờ xác nhận</option>
                         <option value="Đã xác nhận" {{ $row->trang_thai == 'Đã xác nhận' ? 'selected' : '' }}>Đã xác nhận</option>
                         <option value="Đã giao" {{ $row->trang_thai == 'Đã giao' ? 'selected' : '' }}>Đã giao</option>
@@ -85,6 +88,10 @@
             e.preventDefault();
             const orderId = $(this).data('id');
 
+            // Cập nhật tiêu đề modal theo mã đơn hàng
+            $('#orderDetailsModal .modal-title').text('Chi tiết đơn hàng ' + orderId);
+
+            // AJAX load nội dung chi tiết đơn hàng
             $.ajax({
                 url: `/orders/${orderId}/details`,
                 method: 'GET',
@@ -99,6 +106,33 @@
         });
     });
 </script>
+
+<!--màu sắc cho thanh trạng thái-->
+<script>
+    function updateSelectColor(selectElement) {
+        const value = selectElement.value;
+        let color = '';
+        switch (value) {
+            case 'Chờ xác nhận':
+                color = '#f1c40f'; // vàng
+                break;
+            case 'Đã xác nhận':
+                color = '#2ecc71'; // xanh lá
+                break;
+            case 'Đã giao':
+                color = '#3498db'; // xanh nước biển
+                break;
+        }
+        selectElement.style.backgroundColor = color;
+    }
+
+    // Gọi khi trang load để set màu đúng trạng thái ban đầu
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.status-dropdown').forEach(updateSelectColor);
+    });
+</script>
+
+
 
 <!--CSS giao diện trạng thái-->
 <style>
@@ -151,9 +185,10 @@
         text-align: center;
     }
 
-    .modal-body {
+    .modal-body { 
         max-height: 500px;
         overflow-y: auto;
         padding: 20px;
+        text-align: center;
     }
 </style>
