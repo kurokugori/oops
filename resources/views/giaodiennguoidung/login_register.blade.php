@@ -99,6 +99,21 @@
             margin-left: 2px;
         }
 
+        .admin-login-link {
+    display: block;
+    margin-top: 15px;
+    text-align: center;
+    font-size: 0.9em;
+    text-decoration: none;
+    color: #555;
+    transition: color 0.2s ease;
+}
+
+.admin-login-link:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
     </style>
 </head>
 <body>
@@ -143,7 +158,7 @@
 
                 <button type="submit" class="form-button">Đăng Nhập</button>
             </form>
-            <a href="{{ route('login')}}">Đăng nhập bằng tài khoản admin!</a>
+            <a href="{{ route('login') }}" class="admin-login-link">Đăng nhập bằng tài khoản admin</a>
         </div>
 
         {{-- Phần Đăng Ký --}}
