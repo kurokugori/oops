@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OopsController;
 /*Route::get('/', function () {
     return view('welcome');
 });*/
@@ -21,7 +22,6 @@ Route::get('/revenue', [AdminController::class, 'manageRevenue'])->name('admin.r
 Route::get('/create', [AdminController::class, 'oopscreate'])->name("oopscreate");
 
 Route::post('/save/{action}', [AdminController::class, 'oopssave'])->name("oopssave");
-
 
 // --- Routes cho khu vực tài khoản (cần đăng nhập) ---
 Route::middleware(['auth'])->prefix('tai-khoan')->group(function () { // *** Thêm prefix cho gọn ***
@@ -61,4 +61,7 @@ Route::post('/save-order', [OopsController::class, 'saveOrder'])
           ->middleware('auth')->name('saveorder');
           
 
+//hậu
+Route::get('/edit/{id}', [AdminController::class, 'oopsedit'])->name("oopsedit");
+Route::post('/delete', [AdminController::class, 'oopsdelete'])->name("oopsdelete"); 
 
