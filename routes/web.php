@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OopsController; // *** Thêm dòng này ***
 use App\Http\Controllers\CommentController;
 /*
@@ -88,7 +89,6 @@ Route::get('/order',[OopsController::class, 'order'])->name('order');
 // Route thêm vào giỏ hàng
 Route::post('/cart/add',[OopsController::class, 'cartadd'])->name('cartadd');
 // Route xóa sản phẩm trong giỏ hàng
-
 Route::post('/cart/delete',[OopsController::class, 'cartdelete'])->name('cartdelete');
 
 /*Route::post('/order/create','App\Http\Controllers\OopsController@ordercreate')
@@ -101,5 +101,30 @@ Route::get('/checkout', [OopsController::class, 'showCheckoutForm'])
           ->middleware('auth')->name('checkout');
 Route::post('/save-order', [OopsController::class, 'saveOrder'])
           ->middleware('auth')->name('saveorder');
-          
+
+
+
+// Trang quản lý sản phẩm
+Route::get('/login/admin', [AdminController::class, 'showLoginForm'])->name('login');
+Route::post('/login/admin', [AdminController::class, 'login']);
+Route::get('/quanly', [AdminController::class, 'index']);
+
+Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
+Route::get('/index', [AdminController::class, 'index'])->name('admin.index');
+Route::get('/products', [AdminController::class, 'manageProduct'])->name('admin.products');
+
+
+Route::get('/create', [AdminController::class, 'oopscreate'])->name("oopscreate");// thêm sản phẩm
+
+Route::post('/save/{action}', [AdminController::class, 'oopssave'])->name("oopssave");
+
+Route::get('/edit/{id}', [AdminController::class, 'oopsedit'])->name("oopsedit");
+Route::post('/delete', [AdminController::class, 'oopsdelete'])->name("oopsdelete"); 
+
+// Trang quản lý đặt hàng
+Route::get('/order/admin', [AdminController::class, 'manageOrders'])->name('admin.orders');
+
+//Trang quản lý doanh thu
+Route::get('/revenue', [AdminController::class, 'manageRevenue'])->name('admin.revenue');
+
 

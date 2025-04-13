@@ -16,7 +16,7 @@
         @endif
 
     <div>
-        <div style='color:#15c; font-weight:bold;font-size:15px;text-align:center'>DANH SÁCH SẢN PHẨM</div>
+        <div style='color:#15c; font-weight:bold;font-size:25px;text-align:center'>DANH SÁCH SẢN PHẨM</div>
             <style>
                 .product-table {
                     border-collapse: collapse;

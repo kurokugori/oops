@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
-
 use App\Models\DonHang;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product; 
-
 use App\Models\Comment; 
 use App\Models\User;
-
+use App\Http\Controllers\AdminController;
 
 class OopsController extends Controller
 {
@@ -133,10 +131,6 @@ class OopsController extends Controller
         session()->put("cart",$cart);
         return redirect()->route('order');
     }
-
- 
-
-
 // hàm sửa từ oderCreate để thêm phần nhập thông tin
     public function saveOrder(Request $request)
     {
@@ -199,9 +193,6 @@ class OopsController extends Controller
             return back()->with('error', 'Đã xảy ra lỗi khi đặt hàng. Vui lòng thử lại.');
         }
     }
-
-
-
 //hàm show bảng nhập thông tin
     public function showCheckoutForm(Request $request)
     {
@@ -214,5 +205,4 @@ class OopsController extends Controller
 
         return view('giaodiennguoidung.checkout'); // form nhập thông tin
     }
-
 }

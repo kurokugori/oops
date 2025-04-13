@@ -143,6 +143,7 @@
 
                 <button type="submit" class="form-button">Đăng Nhập</button>
             </form>
+            <a href="{{ route('login')}}">Đăng nhập bằng tài khoản admin!</a>
         </div>
 
         {{-- Phần Đăng Ký --}}
