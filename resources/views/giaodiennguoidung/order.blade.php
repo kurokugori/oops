@@ -59,7 +59,7 @@
                             <td align="center">
                                 <input type="checkbox" name="selected_products[]" value="{{ (string)$row->id }}">
                             </td>
-                            <td>{{$row->product_name}}</td>
+                            <td><img src="{{asset('anh/'.$row->image_url)}}" width="50px">{{$row->product_name}}</td>
                             <td align='center'>
                                 <input type="number" name="quantity[{{ $row->id }}]" value="{{ $quantity[$row->id] }}" min="1" style="width: 60px;">
                             </td>

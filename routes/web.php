@@ -121,8 +121,12 @@ Route::post('/save/{action}', [AdminController::class, 'oopssave'])->name("oopss
 Route::get('/edit/{id}', [AdminController::class, 'oopsedit'])->name("oopsedit");
 Route::post('/delete', [AdminController::class, 'oopsdelete'])->name("oopsdelete"); 
 
-// Trang quản lý đặt hàng
-Route::get('/order/admin', [AdminController::class, 'manageOrders'])->name('admin.orders');
+// Trang quản lý đơn đặt hàng
+Route::get('/orders/admin', [AdminController::class, 'manageOrders'])->name('admin.orders');
+Route::put('/orders/{id}/status', [AdminController::class, 'updateOrderStatus'])->name('admin.orders.updateStatus');
+Route::get('/orders/{ma_don_hang}/details', [AdminController::class, 'ajaxOrderDetails']);// Route cho AJAX lấy chi tiết đơn hàng
+
+
 
 //Trang quản lý doanh thu
 Route::get('/revenue', [AdminController::class, 'manageRevenue'])->name('admin.revenue');
