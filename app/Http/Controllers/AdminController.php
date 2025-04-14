@@ -91,8 +91,6 @@ class AdminController extends Controller
                         $data['image_url'] = $fileName;
                     }
 
-                                      
-        
                 //$data = $request->except("id","_token");
                 $message = "";
                 if($action=="add")
@@ -123,15 +121,54 @@ class AdminController extends Controller
                 return redirect()->route('admin.products')->with('status', "Xóa thành công");
             }
 
-
+//Quản lý đơn đặt hàng
             public function manageOrders()
         {
-            return view('admin.manage-orders'); 
+            $data = DB::table('don_hang')->get();
+            return view('admin.manage-orders', compact('data'));  
         }
 
-public function manageRevenue()
+        public function updateOrderStatus(Request $request, $id)
+        {
+            DB::table('don_hang')->where('ma_don_hang', $id)->update([
+                'trang_thai' => $request->input('trang_thai'),
+            ]);
+
+            return redirect()->back()->with('status', 'Cập nhật trạng thái thành công!');
+        }
+
+        public function ajaxOrderDetails($ma_don_hang)
 {
-    return view('admin.manage-revenue'); 
+    $details = DB::table('chi_tiet_don_hang')
+                ->join('products', 'chi_tiet_don_hang.product_id', '=', 'products.id')
+                ->where('chi_tiet_don_hang.ma_don_hang', $ma_don_hang)
+                ->select('products.product_name', 'products.image_url', 'chi_tiet_don_hang.so_luong', 'products.unit_price')
+                ->get();
+
+    $tong = 0;
+    ob_start();
+    echo "<table class='table table-bordered'>";
+    echo "<thead><tr><th>Sản phẩm</th><th>Số lượng</th><th>Đơn giá</th><th>Thành tiền</th></tr></thead><tbody>";
+    foreach ($details as $item) {
+        $thanhTien = $item->unit_price * $item->so_luong;
+        $tong += $thanhTien;
+        echo "<tr>";
+        echo "<td><img src='" . asset('anh/' . $item->image_url) . "' width='50'> $item->product_name</td>";
+        echo "<td>$item->so_luong</td>";
+        echo "<td>" . number_format($item->unit_price, 0, ',', '.') . "đ</td>";
+        echo "<td>" . number_format($thanhTien, 0, ',', '.') . "đ</td>";
+        echo "</tr>";
+    }
+    echo "<tr><td colspan='3' class='text-right'><b>Tổng cộng</b></td><td><b>" . number_format($tong, 0, ',', '.') . "đ</b></td></tr>";
+    echo "</tbody></table>";
+
+    return ob_get_clean();
 }
+
+//Quản lý doanh thu
+        public function manageRevenue()
+        {
+            return view('admin.manage-revenue'); 
+        }
 
 }

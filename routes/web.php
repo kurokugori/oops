@@ -109,7 +109,7 @@ Route::get('/login/admin', [AdminController::class, 'showLoginForm'])->name('log
 Route::post('/login/admin', [AdminController::class, 'login']);
 Route::get('/quanly', [AdminController::class, 'index']);
 
-Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
+Route::post('/logout/admin', [AdminController::class, 'logout'])->name('logout.admin');
 Route::get('/index', [AdminController::class, 'index'])->name('admin.index');
 Route::get('/products', [AdminController::class, 'manageProduct'])->name('admin.products');
 
@@ -121,8 +121,12 @@ Route::post('/save/{action}', [AdminController::class, 'oopssave'])->name("oopss
 Route::get('/edit/{id}', [AdminController::class, 'oopsedit'])->name("oopsedit");
 Route::post('/delete', [AdminController::class, 'oopsdelete'])->name("oopsdelete"); 
 
-// Trang quản lý đặt hàng
-Route::get('/order/admin', [AdminController::class, 'manageOrders'])->name('admin.orders');
+// Trang quản lý đơn đặt hàng
+Route::get('/orders/admin', [AdminController::class, 'manageOrders'])->name('admin.orders');
+Route::put('/orders/{id}/status', [AdminController::class, 'updateOrderStatus'])->name('admin.orders.updateStatus');
+Route::get('/orders/{ma_don_hang}/details', [AdminController::class, 'ajaxOrderDetails']);// Route cho AJAX lấy chi tiết đơn hàng
+
+
 
 //Trang quản lý doanh thu
 Route::get('/revenue', [AdminController::class, 'manageRevenue'])->name('admin.revenue');
