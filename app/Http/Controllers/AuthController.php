@@ -112,36 +112,47 @@ class AuthController extends Controller
             'email.email' => 'Địa chỉ email không hợp lệ.',
             'password.required' => 'Vui lòng nhập mật khẩu.',
         ]);
+        
+         $loginRegisterRoute = 'login_register.show'; // Thường chỉ là tên này
 
-         // --- Sửa tên route khi redirect lỗi ---
-         $loginRegisterRoute = 'giaodiennguoidung.login_register.show'; // Đặt tên route vào biến
-         
-
+        // Nếu validation cơ bản thất bại
         if ($validator->fails()) {
-            
             return redirect()->route($loginRegisterRoute)
-                        ->withErrors($validator, 'login')
-                        ->withInput($request->except('password'));
+                        ->withErrors($validator, 'login') 
+                        ->withInput($request->except('password')); 
         }
 
-        // --- Bước 2: Chuẩn bị Credentials ---
-        $credentials = $request->only('email', 'password');
-        $remember = $request->boolean('remember');
+        // --- Bước 2: Kiểm tra sự tồn tại của User ---
+        $user = User::where('email', $request->email)->first();
 
-        // --- Bước 3: Thử đăng nhập ---
+        // --- Bước 3: Xử lý nếu User không tồn tại ---
+        if (!$user) {
+            // Quay lại trang login với thông báo lỗi "Tài khoản không tồn tại"
+            
+             throw ValidationException::withMessages([
+                'login_error' => __('Tài khoản không tồn tại') // Thông báo lỗi
+            ])->errorBag('login'); // Chỉ định error bag 'login'
+            
+        }
+
+        // --- Bước 4: User tồn tại, thử xác thực mật khẩu ---
+        $credentials = $request->only('email', 'password');
+        $remember = $request->boolean('remember'); 
+
         if (Auth::attempt($credentials, $remember)) {
+            // --- Bước 5: Đăng nhập thành công ---
             $request->session()->regenerate();
 
-            // --- Redirect về trang trước đó hoặc trang chủ ---
-            // Sử dụng intended() với fallback là URL trang chủ
-            return redirect()->intended('/trangchu'); 
+            // Chuyển hướng đến trang đích (trang trước đó hoặc trang chủ)  
+            return redirect()->intended(route('trangchu'));
         }
 
-        // --- Bước 4: Đăng nhập thất bại ---
+        // --- Bước 6: Xác thực thất bại (Mật khẩu không chính xác) ---
+         throw ValidationException::withMessages([
+            'login_error' => __('Tên đăng nhập hoặc mật khẩu không chính xác') // Thông báo lỗi
+        ])->errorBag('login'); // Chỉ định error bag 'login'
         
-        return redirect()->route($loginRegisterRoute)
-                   ->withErrors(['login_error' => 'Địa chỉ email hoặc mật khẩu không chính xác.'], 'login')
-                   ->withInput($request->except('password'));
+    
     }
 
     /**
