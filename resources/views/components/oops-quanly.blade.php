@@ -138,7 +138,7 @@ body {
 
 <div class="header">
 <div class="logo-container">
-        <a href="{{ route('admin.index') }}"> <!-- Thêm thẻ <a> để tạo đường dẫn cho logo -->
+        <a href="{{ route('trangchu') }}"> <!-- Thêm thẻ <a> để tạo đường dẫn cho logo -->
             <img src="{{ asset('images/logo.png') }}" alt="Logo">
         </a>
     </div>
@@ -147,7 +147,7 @@ body {
     </div>
     <div class="user-info">
         <div class="admin-id">{{ session('username', 'khách') }}</div>
-        <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+        <form action="{{ route('logout.admin') }}" method="POST" style="display:inline;">
             @csrf
             <button type="submit" class="btn btn-danger">Đăng Xuất</button>
         </form>
