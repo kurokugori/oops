@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js" ></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto...lay=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -349,7 +350,7 @@
             <div class='row'>
                 <div class='col-md-4 mb-3 mb-md-0'>
                     <h5>TRỤ SỞ</h5>
-                    <p>123 Đường ABC, Quận 1<br>TP. Hồ Chí Minh, Việt Nam</p>
+                    <p>56 Đường Hoàng Diệu 2, Quận Thủ Đức<br>TP. Hồ Chí Minh, Việt Nam</p>
                 </div>
                 <div class='col-md-4 mb-3 mb-md-0'>
                     <h5>THÔNG TIN CHUNG</h5>
@@ -362,10 +363,17 @@
                 </div>
                 <div class='col-md-4'>
                     <h5>BẢN ĐỒ</h5>
-                    {{-- Thay bằng iframe Google Maps hoặc ảnh bản đồ --}}
-                    <p>[Nhúng bản đồ vào đây]</p>
-                    {{-- <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="150" style="border:0;" allowfullscreen="" loading="lazy"></iframe> --}}
-                </div>
+                    <div class="map-section">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.456537789779!2d106.76704667502126!3d10.852682357754236!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175271b869b6015%3A0xd06e137ef646e4fa!2zNTYgSG_DoG5nIERp4buHIDIgLCBMaW5oIFRyaeG7g3UsIFRow7RuZyBUaOG7pywgSOG7kyBDaMOtIE1pbmgsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1713082170662!5m2!1svi!2s" 
+                                width="100%" 
+                                height="150" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">>
+                            </iframe>
+                    </div>
+            </div>
             </div>
             <div class="row mt-3 pt-3 border-top">
                  <div class="col text-muted text-center">
