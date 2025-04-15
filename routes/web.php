@@ -130,5 +130,7 @@ Route::get('/orders/{ma_don_hang}/details', [AdminController::class, 'ajaxOrderD
 
 //Trang quản lý doanh thu
 Route::get('/revenue', [AdminController::class, 'manageRevenue'])->name('admin.revenue');
+Route::get('/revenue/sync', [AdminController::class, 'syncRevenue'])->name('admin.revenue.sync');
+
 
 
