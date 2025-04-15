@@ -45,6 +45,7 @@
             <table class='product-table' style='margin:0 auto; width:70%'>
                 <thead>
                     <th><input type="checkbox" id="select-all"></th>
+                    <th>Hình ảnh</th>
                     <th>Sản phẩm</th>
                     <th>Số lượng</th>
                     <th>Đơn giá</th>
@@ -59,7 +60,8 @@
                             <td align="center">
                                 <input type="checkbox" name="selected_products[]" value="{{ (string)$row->id }}">
                             </td>
-                            <td><img src="{{asset('anh/'.$row->image_url)}}" width="50px">{{$row->product_name}}</td>
+                            <td align='center'><img src="{{asset('anh/'.$row->image_url)}}" width="50px"></td>
+                            <td align='center'>{{$row->product_name}}</td>
                             <td align='center'>
                                 <input type="number" name="quantity[{{ $row->id }}]" value="{{ $quantity[$row->id] }}" min="1" style="width: 60px;">
                             </td>
@@ -77,7 +79,7 @@
                         @endphp
                     @endforeach
                     <tr>
-                        <td colspan='3' align='center'><b>Tổng cộng</b></td>
+                        <td colspan='4' align='center'><b>Tổng cộng</b></td>
                         <td><b><span id="tong-tien">0đ</span></b></td>
                         <td></td>
                     </tr>
@@ -145,7 +147,7 @@
             document.querySelectorAll('input[name="selected_products[]"]:checked').forEach(function (checkbox) {
                 let row = checkbox.closest('tr');
                 let quantity = row.querySelector('input[type="number"]').value;
-                let priceText = row.cells[3].innerText.replace('đ', '').replace(/\./g, '');
+                let priceText = row.cells[4].innerText.replace('đ', '').replace(/\./g, '');
                 let price = parseInt(priceText);
                 total += price * quantity;
             });

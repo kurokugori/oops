@@ -166,9 +166,73 @@ class AdminController extends Controller
 }
 
 //Quản lý doanh thu
-        public function manageRevenue()
+        public function syncRevenue()
         {
-            return view('admin.manage-revenue'); 
+        // Xóa doanh thu của các đơn hàng không còn ở trạng thái 'Đã giao'
+        $invalidRevenues = DB::table('doanh_thu')
+            ->leftJoin('don_hang', 'doanh_thu.ma_don_hang', '=', 'don_hang.ma_don_hang')
+            ->where('don_hang.trang_thai', '!=', 'Đã giao')
+            ->orWhereNull('don_hang.trang_thai') // đề phòng đơn bị xóa
+            ->delete();
+
+        // Lấy đơn hàng mới giao để thêm vào doanh thu
+        $donHangs = DB::table('don_hang')
+            ->where('trang_thai', 'Đã giao')
+            ->select('ma_don_hang', 'ten_nguoi_nhan', 'tong_tien')
+            ->get();
+
+        $dem = 0;
+
+        foreach ($donHangs as $donHang) {
+        $exists = DB::table('doanh_thu')
+            ->where('ma_don_hang', $donHang->ma_don_hang)
+            ->exists();
+
+        if (!$exists) {
+            DB::table('doanh_thu')->insert([
+                'ma_don_hang' => $donHang->ma_don_hang,
+                'ten_nguoi_nhan' => $donHang->ten_nguoi_nhan,
+                'tong_tien' => $donHang->tong_tien,
+                'ngay_cap_nhat' => now(),
+            ]);
+            $dem++;
         }
+        }
+
+        return redirect()->back()->with('status', "Đã ghi nhận $dem đơn hàng vào doanh thu.");
+        }
+
+
+        public function manageRevenue(Request $request)
+        {
+        // Lấy filter từ request (mặc định là 1 giờ)
+            $filter = (int) $request->get('filter', 60); // Mặc định là 60 phút (1 giờ)
+            $fromTime = now()->subMinutes($filter); // Lọc theo phút
+
+        // Lấy doanh thu trong khoảng thời gian filter
+            $revenue = DB::table('doanh_thu')
+                ->where('ngay_cap_nhat', '>=', $fromTime)
+                ->orderByDesc('ngay_cap_nhat')
+                ->get();
+
+        // Tính tổng doanh thu
+            $totalRevenue = $revenue->sum('tong_tien');
+
+        // Lấy doanh thu theo mốc thời gian (theo phút) nếu có
+            $chartData = DB::table('doanh_thu')
+                ->selectRaw("DATE_FORMAT(ngay_cap_nhat, '%Y-%m-%d %H:%i') as time, SUM(tong_tien) as tong")
+                ->where('ngay_cap_nhat', '>=', $fromTime)
+                ->groupBy(DB::raw('DATE_FORMAT(ngay_cap_nhat, "%Y-%m-%d %H:%i")'))
+                ->orderBy('time')
+                ->get();
+
+        // Kiểm tra nếu không có doanh thu theo mốc thời gian, set chartData rỗng
+        if ($chartData->isEmpty()) {
+            $chartData = collect(); // Đảm bảo biến này không gây lỗi trong view
+        }
+
+        return view('admin.manage-revenue', compact('revenue', 'totalRevenue', 'chartData', 'filter'));
+        }
+
 
 }

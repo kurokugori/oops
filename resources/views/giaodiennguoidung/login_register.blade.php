@@ -123,12 +123,12 @@
         <div class="form-section login-section">
             <h2>ĐĂNG NHẬP</h2>
 
-            {{-- Hiển thị lỗi chung của form login (nếu có) --}}
+            {{--ĐOẠN NÀY SẼ HIỂN THỊ ĐÚNG THÔNG BÁO TỪ CONTROLLER--}}
             @if ($errors->login->has('login_error'))
-                <div class="login-error-container">
-                    {{ $errors->login->first('login_error') }}
-                </div>
-            @endif
+            <div class="login-error-container">
+                {{ $errors->login->first('login_error') }}
+            </div>
+        @endif
 
             <form method="POST" action="{{ route('login.perform') }}">
                 @csrf

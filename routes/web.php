@@ -109,7 +109,7 @@ Route::get('/login/admin', [AdminController::class, 'showLoginForm'])->name('log
 Route::post('/login/admin', [AdminController::class, 'login']);
 Route::get('/quanly', [AdminController::class, 'index']);
 
-Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
+Route::post('/logout/admin', [AdminController::class, 'logout'])->name('logout.admin');
 Route::get('/index', [AdminController::class, 'index'])->name('admin.index');
 Route::get('/products', [AdminController::class, 'manageProduct'])->name('admin.products');
 
@@ -130,5 +130,7 @@ Route::get('/orders/{ma_don_hang}/details', [AdminController::class, 'ajaxOrderD
 
 //Trang quản lý doanh thu
 Route::get('/revenue', [AdminController::class, 'manageRevenue'])->name('admin.revenue');
+Route::get('/revenue/sync', [AdminController::class, 'syncRevenue'])->name('admin.revenue.sync');
+
 
 
